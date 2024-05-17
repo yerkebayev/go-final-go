@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/yerkebayev/go-final-go/proto";
+
+service TeacherService {
+  rpc GetReport(TeacherRequest) returns (TeacherReportResponse);
+}
+
+service StudentService {
+  rpc AddStudent(AddStudentRequest) returns (AddStudentResponse);
+  rpc AddStudentToCourse(AddStudentToCourseRequest) returns (AddStudentToCourseResponse);
+  rpc GetStudentNames (GetStudentNamesRequest) returns (GetStudentNamesResponse);
+}
+
+service MainService {
+  rpc AddAttendance(AttendanceRequest) returns (AttendanceResponse);
+}
+
+service ImageService {
+  rpc UploadImages (UploadImagesRequest) returns (UploadImagesResponse);
+  rpc GetImages (GetImagesRequest) returns (GetImagesResponse);
+}
+message GetImagesRequest {}
+
+message GetImagesResponse {
+  repeated Image images = 1;
+}
+
+message UploadImagesRequest {
+  int32 user_id = 1;
+  repeated Image images = 2;
+}
+
+message UploadImagesResponse {
+  string status = 1;
+}
+
+message Image {
+  int32 id = 1;
+  int32 userId = 2;
+  bytes data = 3;
+}
+
+message TeacherRequest {
+  int32 id = 1;
+  int32 sessionId = 2;
+}
+
+message TeacherResponse {
+  int32 id = 1;
+  string name = 2;
+  repeated Course courses = 3;
+}
+
+message TeacherReportResponse {
+  repeated string reports = 1;
+}
+
+message StudentRequest {
+  int32 id = 1;
+}
+
+message StudentResponse {
+  int32 id = 1;
+  string name = 2;
+  repeated Attendance attendances = 3;
+}
+
+message Attendance {
+  int32 id = 1;
+  string details = 2;
+}
+
+message Course {
+  int32 id = 1;
+  string name = 2;
+}
+
+message AttendanceRequest {
+  int32 id = 1;
+}
+
+message AttendanceResponse {
+  int32 id = 1;
+  string details = 2;
+}
+
+message AddStudentRequest {
+  int32 id = 1;
+  string studentNumberId = 2;
+  string name = 3;
+}
+
+message AddStudentResponse {
+  int32 id = 1;
+}
+
+message AddStudentToCourseRequest {
+  int32 studentId = 1;
+  int32 courseId = 2;
+}
+
+message AddStudentToCourseResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetStudentNamesRequest {}
+
+message GetStudentNamesResponse {
+  repeated Student students = 1;
+}
+
+message Student {
+  int32 id = 1;
+  string studentNumberId = 2;
+  string name = 3;
+}
