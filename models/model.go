@@ -2,7 +2,6 @@ package models
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 type Course struct {
@@ -17,7 +16,6 @@ type Session struct {
 	TeacherID   uint
 	CourseID    uint
 	Date        string
-	Students    []Student `gorm:"many2many:student_sessions;"`
 	Attendances []Attendance
 }
 
@@ -25,8 +23,7 @@ type Attendance struct {
 	gorm.Model
 	SessionID uint
 	StudentID uint
-	Present   bool
-	Time      time.Time `gorm:"not null"`
+	Time      string
 }
 
 type Image struct {

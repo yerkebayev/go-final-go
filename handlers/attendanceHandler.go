@@ -7,11 +7,6 @@ import (
 	"time"
 )
 
-func (h Handler) AllAttendance(c *gin.Context) {
-	var attendances []models.Attendance
-	h.DB.Find(&attendances)
-	c.IndentedJSON(http.StatusOK, attendances)
-}
 func (h Handler) AddAttendance(c *gin.Context) {
 	var attendance models.Attendance
 	if err := c.BindJSON(&attendance); err != nil {
@@ -20,11 +15,7 @@ func (h Handler) AddAttendance(c *gin.Context) {
 		})
 		return
 	}
-
-	if attendance.Time.IsZero() {
-		attendance.Time = time.Now()
-	}
-
+	attendance.Time = time.Now().Format(time.RFC3339)
 	h.DB.Create(&attendance)
 	c.JSON(http.StatusOK, &attendance)
 }
