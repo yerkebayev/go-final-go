@@ -107,6 +107,21 @@ service AdminService {
   rpc GetCourses(Empty) returns (GetCoursesResponse);
   rpc GetStudents(Empty) returns (GetStudentsResponse);
   rpc GetTeachers(Empty) returns (GetTeachersResponse);
+  rpc AddSession(AddSessionRequest) returns (AddSessionResponse);
+  rpc GetSessions(GetSessionsRequest) returns (GetSessionsResponse);
+}
+
+message GetSessionsRequest {}
+
+message GetSessionsResponse {
+  repeated Session sessions = 1;
+}
+
+message Session {
+  int32 id = 1;
+  int32 teacherId = 2;
+  int32 courseId = 3;
+  string date = 4;
 }
 
 message Empty {}
@@ -144,8 +159,8 @@ message AddStudentToCourseResponse {
 }
 
 message AttendanceRequest {
-  int32 sessionId = 2;
-  int32 studentId = 3;
+  int32 sessionId = 1;
+  int32 studentId = 2;
 }
 
 message AttendanceResponse {

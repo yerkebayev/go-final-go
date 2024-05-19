@@ -429,6 +429,8 @@ const (
 	AdminService_GetCourses_FullMethodName         = "/proto.AdminService/GetCourses"
 	AdminService_GetStudents_FullMethodName        = "/proto.AdminService/GetStudents"
 	AdminService_GetTeachers_FullMethodName        = "/proto.AdminService/GetTeachers"
+	AdminService_AddSession_FullMethodName         = "/proto.AdminService/AddSession"
+	AdminService_GetSessions_FullMethodName        = "/proto.AdminService/GetSessions"
 )
 
 // AdminServiceClient is the client API for AdminService service.
@@ -443,6 +445,8 @@ type AdminServiceClient interface {
 	GetCourses(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetCoursesResponse, error)
 	GetStudents(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetStudentsResponse, error)
 	GetTeachers(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetTeachersResponse, error)
+	AddSession(ctx context.Context, in *AddSessionRequest, opts ...grpc.CallOption) (*AddSessionResponse, error)
+	GetSessions(ctx context.Context, in *GetSessionsRequest, opts ...grpc.CallOption) (*GetSessionsResponse, error)
 }
 
 type adminServiceClient struct {
@@ -525,6 +529,24 @@ func (c *adminServiceClient) GetTeachers(ctx context.Context, in *Empty, opts ..
 	return out, nil
 }
 
+func (c *adminServiceClient) AddSession(ctx context.Context, in *AddSessionRequest, opts ...grpc.CallOption) (*AddSessionResponse, error) {
+	out := new(AddSessionResponse)
+	err := c.cc.Invoke(ctx, AdminService_AddSession_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminServiceClient) GetSessions(ctx context.Context, in *GetSessionsRequest, opts ...grpc.CallOption) (*GetSessionsResponse, error) {
+	out := new(GetSessionsResponse)
+	err := c.cc.Invoke(ctx, AdminService_GetSessions_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminServiceServer is the server API for AdminService service.
 // All implementations must embed UnimplementedAdminServiceServer
 // for forward compatibility
@@ -537,6 +559,8 @@ type AdminServiceServer interface {
 	GetCourses(context.Context, *Empty) (*GetCoursesResponse, error)
 	GetStudents(context.Context, *Empty) (*GetStudentsResponse, error)
 	GetTeachers(context.Context, *Empty) (*GetTeachersResponse, error)
+	AddSession(context.Context, *AddSessionRequest) (*AddSessionResponse, error)
+	GetSessions(context.Context, *GetSessionsRequest) (*GetSessionsResponse, error)
 	mustEmbedUnimplementedAdminServiceServer()
 }
 
@@ -567,6 +591,12 @@ func (UnimplementedAdminServiceServer) GetStudents(context.Context, *Empty) (*Ge
 }
 func (UnimplementedAdminServiceServer) GetTeachers(context.Context, *Empty) (*GetTeachersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTeachers not implemented")
+}
+func (UnimplementedAdminServiceServer) AddSession(context.Context, *AddSessionRequest) (*AddSessionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddSession not implemented")
+}
+func (UnimplementedAdminServiceServer) GetSessions(context.Context, *GetSessionsRequest) (*GetSessionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSessions not implemented")
 }
 func (UnimplementedAdminServiceServer) mustEmbedUnimplementedAdminServiceServer() {}
 
@@ -725,6 +755,42 @@ func _AdminService_GetTeachers_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminService_AddSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServiceServer).AddSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminService_AddSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServiceServer).AddSession(ctx, req.(*AddSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AdminService_GetSessions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSessionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServiceServer).GetSessions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminService_GetSessions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServiceServer).GetSessions(ctx, req.(*GetSessionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AdminService_ServiceDesc is the grpc.ServiceDesc for AdminService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -763,6 +829,14 @@ var AdminService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTeachers",
 			Handler:    _AdminService_GetTeachers_Handler,
+		},
+		{
+			MethodName: "AddSession",
+			Handler:    _AdminService_AddSession_Handler,
+		},
+		{
+			MethodName: "GetSessions",
+			Handler:    _AdminService_GetSessions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
